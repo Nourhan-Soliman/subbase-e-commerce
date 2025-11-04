@@ -1,6 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = "https://ndmfkgcmkiforsnevdqw.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kbWZrZ2Nta2lmb3JzbmV2ZHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4NzM2MjgsImV4cCI6MjA3NjQ0OTYyOH0.An-ZZJ2GGOWBEJ9G8YTaDwvk2e03yOoRsGEJrhL3_AY";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY
+const SERVICE_ROLE_KEY = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+export const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)

@@ -37,7 +37,7 @@ export default function SignUp() {
       setMessage(" Account created but login failed: " + signInError.message);
     } else {
       setMessage(" Account created successfully! Redirecting...");
-      setTimeout(() => navigate("/home"), 1500);
+      setTimeout(() => navigate("/"), 1500);
     }
   };
 

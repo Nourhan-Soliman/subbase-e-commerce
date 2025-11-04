@@ -1,39 +1,35 @@
-/* .auth-bg {
-  background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
+.custom-logo {
+  font-style: italic;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.auth-card {
-  width: 380px;
-  border-radius: 16px;
-  background: #fff;
-  transition: all 0.3s ease-in-out;
+.custom-logo:hover {
+  transform: scale(1.1);
+  color: #ffd700;
 }
 
-.auth-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+.custom-heading {
+    transition: transform 0.3s ease, color 0.3s ease;
+
+    font-family: 'Poppins', 'Arial', sans-serif;
+    font-weight: 700; 
+    font-size: 2.5rem;
+    color: #3a8bdc; 
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    position: relative;
+    cursor: pointer;
 }
 
-.form-label {
-  color: #374151;
-  font-size: 0.95rem;
+.custom-heading:hover {
+  transform: scale(1.05);
+  color: #4b6cb7;
 }
-
-.form-control {
-  border-radius: 10px;
-  padding: 10px 14px;
-}
-
-.btn-primary {
-  background-color: #2563eb;
-  border: none;
-  border-radius: 10px;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-}
-
-.text-primary {
-  color: #2563eb !important;
-} */

@@ -21,7 +21,7 @@ export default function SignIn() {
       setMessage(" Login failed: " + error.message);
     } else {
       setMessage(" Login successful!");
-      setTimeout(() => navigate("/home"), 1000);
+      setTimeout(() => navigate("/"), 1000);
     }
   };
 

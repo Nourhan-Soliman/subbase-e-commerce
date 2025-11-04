@@ -1,76 +1,99 @@
 import React, { useEffect, useState } from "react";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import { supabase } from "../supabaseClient";
-import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     getUser();
   }, []);
 
-  // ✅ جلب بيانات المستخدم
   async function getUser() {
     const { data, error } = await supabase.auth.getUser();
-    if (error) console.error("Error fetching user:", error.message);
-    else setUser(data.user);
+    if (!error && data.user) {
+      setUser(data.user);
+      fetchOrders(data.user.id);
+    }
   }
 
-  //  تسجيل الخروج
-  async function handleSignOut() {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.error("Error signing out:", error.message);
-    else navigate("/signin");
+  async function fetchOrders(userId) {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", "Completed")
+      .order("id", { ascending: false });
+
+    if (!error && data) setOrders(data);
   }
 
-  //  شاشة التحميل
-  if (!user) {
-    return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
-        <div className="spinner-border text-primary mb-3" role="status"></div>
-        <p className="text-secondary fw-semibold">Loading profile...</p>
-      </div>
-    );
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.href = "/signin";
   }
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card shadow-lg border-0 rounded-4" style={{ width: "380px" }}>
-        <div className="card-body text-center p-4">
-          <div className="mb-3">
-            <i className="bi bi-person-circle text-primary" style={{ fontSize: "4rem" }}></i>
+    <>
+      <Navbar user={user} onLogout={handleLogout} />
+
+      <div className="container-fluid py-5 bg-light min-vh-100">
+        {user ? (
+          <div className="container">
+            <div className="text-center mb-5">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                alt="avatar"
+                className="rounded-circle mb-3"
+                style={{ width: "100px" }}
+              />
+              <h3 className="custom-heading">
+                Welcome, {user.email.split("@")[0]} 👋
+              </h3>
+              <p className="text-muted">
+                You have {orders.length} completed{" "}
+                {orders.length === 1 ? "order" : "orders"}.
+              </p>
+            </div>
+
+            <div className="row justify-content-center">
+              {orders.length === 0 ? (
+                <p className="text-center text-muted">
+                  No completed orders yet.
+                </p>
+              ) : (
+                orders.map((order) => (
+                  <div key={order.id} className="col-md-4 col-lg-3 mb-4">
+                    <div className="card shadow-sm border-0 rounded-4 text-center">
+                      <div className="card-body">
+                        <h5 className="fw-bold">Order #{order.id}</h5>
+                        <p className="fw-bold text-success mb-1">
+                          {order.total_price} EGP
+                        </p>
+                        <span className="badge bg-success">
+                          {order.status}
+                        </span>
+                        <p className="text-muted mt-2 mb-0">
+                          {new Date(order.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
-
-          <h4 className="fw-bold text-primary mb-3">Profile</h4>
-
-          <ul className="list-group list-group-flush text-start mb-4">
-            <li className="list-group-item">
-              <i className="bi bi-envelope-fill text-secondary me-2"></i>
-              <strong>Email:</strong> <br /> {user.email}
-            </li>
-            <li className="list-group-item">
-              <i className="bi bi-key-fill text-secondary me-2"></i>
-              <strong>ID:</strong> <br /> {user.id}
-            </li>
-            <li className="list-group-item">
-              <i className="bi bi-calendar3 text-secondary me-2"></i>
-              <strong>Created at:</strong> <br />{" "}
-              {new Date(user.created_at).toLocaleString()}
-            </li>
-          </ul>
-
-          <button
-            onClick={handleSignOut}
-            className="btn btn-outline-danger w-100 fw-semibold"
-          >
-            <i className="bi bi-box-arrow-right me-2"></i>
-            Sign Out
-          </button>
-        </div>
+        ) : (
+          <p className="text-center text-danger">
+            Please log in to view profile.
+          </p>
+        )}
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
 }
